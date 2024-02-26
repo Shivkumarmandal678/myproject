@@ -29,7 +29,7 @@ def SignupPage(request):
         pass2 = request.POST['pass2']
         
         if User.objects.filter(username=username):
-            messages.error(request, "Username already exist! Please try some other username.")
+            messages.error(request, "Username already exist!! Please try some other username...")
             return redirect('signup')
         
         if User.objects.filter(email=email).exists():
@@ -51,7 +51,6 @@ def SignupPage(request):
         myuser = User.objects.create_user(username, email, pass1)
         myuser.first_name = fname
         myuser.last_name = lname
-        # myuser.is_active = False
         myuser.is_active = False
         myuser.save()
         messages.success(request, "Your Account has been created succesfully!! Please check your email to confirm your email address in order to activate your account.")
@@ -97,7 +96,6 @@ def ActivatePage(request,uidb64,token):
 
     if myuser is not None and generate_token.check_token(myuser,token):
         myuser.is_active = True
-        # user.profile.signup_confirmation = True
         myuser.save()
         login(request,myuser)
         messages.success(request, "Your Account has been activated!!")
@@ -116,11 +114,11 @@ def SigninPage(request):
         if user is not None:
             login(request, user)
             fname = user.first_name
-            # messages.success(request, "Logged In Sucessfully!!")
+            messages.success(request, "Logged In Sucessfully!!")
             return render(request, "mainmenu/home.html",{"fname":fname})
         else:
-            messages.error(request, "Bad Credentials!!")
-            return redirect('signin')
+            messages.error(request, "Username not exit...")
+            return redirect('signup')
     
     return render(request, "loginsystem/signin.html")
 
