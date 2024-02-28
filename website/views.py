@@ -13,6 +13,11 @@ from .email_tokens import generate_token
 from django.contrib.auth.decorators import login_required
 
 
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+from django.urls import reverse_lazy
+
+
 
 # Create your views here.
 @ login_required(login_url="/signin")
@@ -86,7 +91,6 @@ def SignupPage(request):
         
     return render(request, "loginsystem/signup.html")
 
-
 def ActivatePage(request,uidb64,token):
     try:
         uid = force_text(urlsafe_base64_decode(uidb64))
@@ -103,7 +107,6 @@ def ActivatePage(request,uidb64,token):
     else:
         return render(request,'activation_failed.html')
 
-
 def SigninPage(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -117,10 +120,29 @@ def SigninPage(request):
             messages.success(request, "Logged In Sucessfully!!")
             return render(request, "mainmenu/home.html",{"fname":fname})
         else:
-            messages.error(request, "Username not exit...")
-            return redirect('signup')
+            messages.error(request, "Password No Match Plz Try Again...")
+            return redirect('signin')
     
     return render(request, "loginsystem/signin.html")
+
+
+
+
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'loginsystem/password_reset_email.html'
+    success_url = reverse_lazy('password_reset_done')
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'loginsystem/password_reset_done.html'
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy('password_reset_complete')
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'loginsystem/password_reset_complete.html'
+
+
+
 
 
 def SignoutPage(request):

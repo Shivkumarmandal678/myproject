@@ -36,7 +36,7 @@ SECRET_KEY = 'django-insecure-oh+4)l8u8!mkn80kh3d!xeo7y-il=(8vo=a4&5jkr3&+h2x=b6
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
+PASSWORD_RESET_TIMEOUT_DAYS = 1  # Change to a longer duration as needed
 ALLOWED_HOSTS = ['*']
 
 
